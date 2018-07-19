@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+
+<head>
+  <link rel="stylesheet" href="./style.css">
+  <meta charset="utf-8">
+  <title>Kingsley</title>
+</head>
+
+<body>
+  <canvas class="fireworks"></canvas>
+
+  <div class="slider-outside">
+    <div class="slider-inside">
+      <div class="slider-images">
+        <img src="./1.jpg">
+      </div>
+      <div class="slider-images">
+        <img src="./2.jpg">
+      </div>
+      <div class="slider-images">
+        <img src="./3.jpg">
+      </div>
+      <div class="slider-images">
+        <img src="./4.jpg">
+      </div>
+      <div class="slider-images">
+        <img src="./5.jpg">
+      </div>
+    </div>
+  </div>
+
+  <div class="select">
+    <p id="prev">＜</p>
+    <ul id="slider-dot">
+    </ul>
+    <p id="next">＞</p>
+  </div>
+
+  <!-- console.log(this.dotImage); -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.2.0/anime.min.js"></script>
+  <script>
+    // 画像配列
+    // const images = document.querySelectorAll('.slider-images');
+
+    class Carousel {
+      constructor() {
+        this.images = document.querySelectorAll('.slider-images');
+        // クラス名取得
+        this.target = document.querySelector('.slider-inside');
+        // 横幅取得
+        this.width = document.querySelector('.slider-outside').clientWidth;
+
+        this.index = 0;
+        this.translateX = 0;
+
+        this.timer = null;
+        this.dotImage = null;
+
+        this.createDots();
+        this.bind();
+        this.start();
+      }
+
+      bind() {
+        // 画像切り替え処理
+        document.getElementById('next').onclick = () => {
+          clearInterval(this.timer);
+          this.next();
+          this.start();
+        }
+
+        document.getElementById('prev').onclick = () => {
+          clearInterval(this.timer);
+          this.prev();
+          this.start();
+        }
+
+        [].forEach.call(this.dotImage, dot => {
+          dot.onclick = (e) => {
+            this.resetClass();
+            clearInterval(this.timer);
+
+            this.index = Number(e.currentTarget.dataset.value);
+            this.translateX = this.index * -this.width;
+            e.currentTarget.classList.add("li-gray");
+
+            this.updateIndicator();
+            this.slideImage();
+            this.start();
+          };
+        });
+      }
+
+      // 自動処理
+      slideImage() {
+        let domNode = anime({
+          targets: this.target,
+          translateX: this.translateX,
+          easing: 'easeOutCubic'
+        });
+      }
+      // クラス名初期化
+      updateIndicator() {
+        this.resetClass();
+        this.dotImage[this.index].classList.add("li-gray");
+      };
+      // 次へ・前へ
+      next() {
+        // if (index < images.length - 1) {
+        //   index++;
+        //   translateX -= width;
+        // } else if (index == images.length - 1) {
+        //   index = 0;
+        //   translateX = 0;
+        // };
+        this.index = (this.index < this.images.length - 1)
+          ? this.index + 1
+          : 0;
+
+        this.translateX = -this.width * this.index;
+
+        this.updateIndicator();
+        this.slideImage();
+      }
+      prev() {
+        this.index = (this.index <= 0)
+          ? this.images.length - 1
+          : this.index - 1;
+
+        this.translateX = -this.width * this.index;
+        // if (index > 0) {
+        //   index--;
+        //   translateX += width;
+        // }
+        // else if (index == 0) {
+        //   index = images.length - 1;
+        //   translateX = width * index * -1;
+        // }
+        this.updateIndicator();
+        this.slideImage();
+      }
+
+      // ドット追加
+      createDots() {
+        this.images.forEach((currentValue, index) => {
+          const li = document.createElement('li');
+          li.dataset.value = index;
+          li.innerHTML = "■";
+          li.className = "dot-button";
+          document.getElementById('slider-dot').appendChild(li);
+        });
+
+        this.dotImage = document.querySelectorAll('.dot-button');
+        this.dotImage[0].classList.add("li-gray");
+      }
+
+      resetClass() {
+        this.dotImage.forEach((dotImage) => {
+          dotImage.classList.remove("li-gray");
+        });
+      }
+
+      clear() {
+        clearInterval(this.timer);
+      }
+
+      start() {
+        this.timer = setInterval(this.next.bind(this), 3000);
+      }
+    }
+
+    const carousel = new Carousel();
+
+  </script>
+
+</body>
+
+
+</html>

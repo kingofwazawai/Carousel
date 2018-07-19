@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+
+<head>
+  <link rel="stylesheet" href="./style.css">
+  <meta charset="utf-8">
+  <title>Kingsley</title>
+</head>
+
+<body>
+  <div class="slider">
+    <img id="main-image" src="./1.jpg">
+  </div>
+
+  <div class="toolbar">
+    <p id="next">next</p>
+    <p id="prev">prev</p>
+
+    <ul id="slider-button">
+    </ul>
+  </div>
+
+  <div id="box1"></div>
+
+  <script src="./TweenMax.min.js"></script>
+  <script>
+    // 変数宣言
+    const images = ['./1.jpg', './2.jpg', './3.jpg', './4.jpg', './5.jpg'];
+    // const images2 = ['./6.jpg', './7.jpg', './8.jpg', './9.jpg', './10.jpg'];
+    // let index = 0;
+    // let timer = null
+
+    TweenMax.to('#box1', 1, { left: '200px' });
+
+    class Carousel {
+      constructor(images) {
+        this.images = images;
+        this.index = 0;
+        this.timer = null;
+        this.dotImage = null;
+
+        this.createDots();
+        this.bind();
+        this.start();
+        this.test = 2;
+
+        this.aaa = 'aaa';
+      }
+
+
+
+      bind() {
+        document.getElementById('next').onclick = () => {
+          clearInterval(this.timer);
+          this.next();
+          this.start();
+        }
+
+        document.getElementById('prev').onclick = () => {
+          clearInterval(this.timer);
+          this.prev();
+          this.start();
+        }
+
+        [].forEach.call(this.dotImage, dot => {
+          dot.onclick = (e) => {
+            this.resetClass();
+            clearInterval(this.timer);
+
+            this.index = Number(e.currentTarget.dataset.value);
+            e.currentTarget.classList.add("li-gray");
+
+            this.updateIndicator();
+            this.slideImage();
+            this.start();
+          };
+        });
+      }
+
+      slideImage() {
+        document.getElementById('main-image').src = this.images[this.index];
+      }
+
+      updateIndicator() {
+        this.resetClass();
+        this.dotImage[this.index].classList.add("li-gray");
+      }
+
+      next() {
+        this.index = (this.index < this.images.length - 1)
+          ? this.index + 1
+          : 0;
+        this.updateIndicator();
+        this.slideImage();
+      };
+
+      prev() {
+        this.index = (this.index <= 0)
+          ? this.images.length - 1
+          : this.index - 1;
+        this.updateIndicator();
+        this.slideImage();
+      }
+
+      createDots() {
+        this.images.forEach((currentValue, index) => {
+          const li = document.createElement('li');
+          li.dataset.value = index;
+          li.innerHTML = "■";
+          li.className = "dot-button";
+          document.getElementById('slider-button').appendChild(li);
+        });
+
+        this.dotImage = document.querySelectorAll('.dot-button');
+        this.dotImage[0].classList.add("li-gray");
+      }
+
+      resetClass() {
+        this.dotImage.forEach((dotImage) => {
+          dotImage.classList.remove("li-gray");
+        });
+      }
+
+      clear() {
+        clearInterval(this.timer);
+      }
+
+      start() {
+        this.timer = setInterval(this.next.bind(this), 3000);
+      }
+    }
+
+    const carousel = new Carousel(images);
+
+    setTimeout(() => {
+      carousel.clear();
+      carousel.next();
+      carousel.start();
+    }, 1000);
+    const carousel2 = new Carousel(images2);
+
+    ドット追加処理
+
+    images.forEach((currentValue, index) => {
+      const li = document.createElement('li');
+      li.dataset.value = index;
+      li.innerHTML = "■";
+      li.className = "dot-button";
+      document.getElementById('slider-button').appendChild(li);
+      console.log('currentValue', currentValue);
+      console.log('index', index);
+    });
+
+    const dotimage = document.querySelectorAll('.dot-button');
+    dotimage[0].classList.add("li-gray");
+
+    画像切り替え処理
+    let slideImage = () => {
+      document.getElementById('main-image').src = images[index];
+    };
+
+    let updateIndicator = () => {
+      resetClass();
+      dotimage[index].classList.add("li-gray");
+    };
+
+    // 次へ・前へ処理
+    let next = () => {
+      index = (index < images.length - 1)
+        ? index + 1
+        : 0;
+      updateIndicator();
+      slideImage();
+    };
+
+    let prev = () => {
+      index = (index <= 0)
+        ? images.length - 1
+        : index - 1;
+      updateIndicator();
+      slideImage();
+    }
+    document.getElementById('next').onclick = () => {
+      clearInterval(timer);
+      next();
+      start();
+    }
+    document.getElementById('prev').onclick = () => {
+      clearInterval(timer);
+      prev();
+      start();
+    }
+
+    開始
+    let start = () => {
+      timer = setInterval(next, 3000);
+    }
+    start();
+
+    ドットクリック処理
+    [].forEach.call(dotimage, dot => {
+      dot.onclick = (e) => {
+        resetClass();
+        clearInterval(timer);
+
+        index = Number(e.currentTarget.dataset.value);
+        e.currentTarget.classList.add("li-gray");
+
+        updateIndicator();
+        slideImage();
+        start();
+      };
+    });
+
+    // クラス名初期化
+    let resetClass = () => dotimage.forEach((dotimages) => {
+      dotimages.classList.remove("li-gray");
+    });
+
+    // console.log(this);
+
+    // this.rap = 'ラップ';
+
+    // console.log(this.rap);
+
+    // let rapper = {
+    //   monster: '呂布カルマ',
+    //   challenger: 'Lick-G'
+    // }
+
+    // function Person(name, age) {
+    //   this.name = name;
+    //   this.age = age;
+    // }
+
+    // let person1 = new Person('太郎', 22);
+    // let person2 = new Person('次郎', 31);
+
+    // console.log(person1.name);
+
+
+
+
+
+
+
+    // function show() {
+    //   console.log(this);
+    // }
+
+    // show();
+    // show.call(rapper);
+    // show.apply(rapper);
+
+
+
+    // class Human {
+    //   constructor(name) {
+    //     this.name = name;
+    //   }
+    //   hello() {
+    //     console.log('Hello I am ' + this.name);
+    //   }
+    // };
+
+    // Human.prototype.hello = function () {
+    //   console.log('Hello I am ' + this.name);
+    // };
+
+    // const dom = new Human('dom');
+    // const sam = new Human('sam');
+
+    // console.log(dom.name); // => dom
+    // console.log(sam.name); // => sam
+
+    // dom.hello(); // => Hello I am dom
+    // sam.hello(); // => Hello I am sam
+
+
+
+    class Math {
+      constructor(num) {
+        this.num = num;
+      }
+
+      increment() {
+        this.num++;
+      }
+      pow() {
+        this.num = this.num * this.num;
+      }
+
+      add(num) {
+        this.num += num;
+      }
+    };
+
+    const math = new Math(2);
+    const math2 = new Math(4);
+    const math3 = new Math(8);
+
+    math.increment();
+    math2.pow();
+    math3.add(10);
+
+    console.log(math.num); // => 3
+    console.log(math2.num); // => 16
+    console.log(math3.num); // => 18
+
+
+
+
+
+
+    // const Counter = function () {
+    //   this.count = 0;
+    // };
+
+    // Counter.prototype.increment = function () {
+    //   this.count += 1;
+    // };
+
+    // Counter.prototype.decrement = function () {
+    //   this.count -= 1;
+    // };
+
+    // let count = 2;
+
+    // const counter1 = new Counter();
+    // const counter2 = new Counter();
+
+    // counter1.increment();
+    // counter2.decrement();
+    // console.log(counter1.count);
+    // console.log(counter2.count);
+
+
+
+
+
+
+
+  </script>
+</body>
+
+</html>

@@ -74,7 +74,7 @@
         });
 
         [].forEach.call(this.dotImage, dot => {
-          dot.onclick = (e) => {
+          dot.addEventListener('click', (e) => {
             this.clear();
             this.resetClass();
 
@@ -85,7 +85,7 @@
             this.updateIndicator();
             this.slideImage();
             // this.start();
-          };
+          });
         });
       }
 

@@ -42,10 +42,12 @@
   <script>
     class Carousel {
       constructor() {
+        // クラス名取得
         this.images = document.querySelectorAll('.slider-images');
         this.target = document.querySelector('.slider-inside');
         this.width = document.querySelector('.slider-outside').clientWidth;
 
+        // 変数定義
         this.index = 0;
         this.translateX = 0;
 
@@ -57,6 +59,7 @@
         this.start();
       }
 
+      // クリック処理
       bind() {
         document.getElementById('next').onclick = () => {
           clearInterval(this.timer);
@@ -73,7 +76,7 @@
         [].forEach.call(this.dotImage, dot => {
           dot.onclick = (e) => {
             this.resetClass();
-            clearInterval(this.timer);
+            this.clear();
 
             this.index = Number(e.currentTarget.dataset.value);
             this.translateX = this.index * -this.width;
@@ -86,13 +89,18 @@
         });
       }
 
+      // 画像切り替えアニメーション処理
       slideImage() {
-        let domNode = anime({
+        anime({
           targets: this.target,
           translateX: this.translateX,
-          easing: 'easeOutCubic'
+          easing: 'easeOutCubic',
+          complete: () => {
+            this.clear();
+          }
         });
       }
+      // 次・前　処理
       updateIndicator() {
         this.resetClass();
         this.dotImage[this.index].classList.add("li-gray");
@@ -117,6 +125,7 @@
         this.slideImage();
       }
 
+      // ドット追加処理
       createDots() {
         this.images.forEach((currentValue, index) => {
           const li = document.createElement('li');
@@ -130,16 +139,20 @@
         this.dotImage[0].classList.add("li-gray");
       }
 
+      // クラス名初期化
       resetClass() {
         this.dotImage.forEach((dotImage) => {
           dotImage.classList.remove("li-gray");
         });
       }
 
+      // インターバル初期化
       clear() {
         clearInterval(this.timer);
+        this.start();
       }
 
+      // 開始
       start() {
         this.timer = setInterval(this.next.bind(this), 3000);
       }

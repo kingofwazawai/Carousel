@@ -53,6 +53,8 @@
 
         this.timer = null;
         this.dotImage = null;
+        this.nextEvent = document.getElementById('next');
+        this.prevEvent = document.getElementById('prev');
 
         this.createDots();
         this.bind();
@@ -61,15 +63,15 @@
 
       // クリック処理
       bind() {
-        document.getElementById('next').onclick = () => {
+        this.nextEvent.addEventListener('click', () => {
           this.clear();
           this.next();
-        }
+        });
 
-        document.getElementById('prev').onclick = () => {
+        this.prevEvent.addEventListener('click', () => {
           this.clear();
           this.prev();
-        }
+        });
 
         [].forEach.call(this.dotImage, dot => {
           dot.onclick = (e) => {
@@ -78,11 +80,11 @@
 
             this.index = Number(e.currentTarget.dataset.value);
             this.translateX = this.index * -this.width;
-            e.currentTarget.classList.add("li-gray");
+            // e.currentTarget.classList.add("li-gray");
 
             this.updateIndicator();
             this.slideImage();
-            this.start();
+            // this.start();
           };
         });
       }

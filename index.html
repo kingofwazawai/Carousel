@@ -62,21 +62,19 @@
       // クリック処理
       bind() {
         document.getElementById('next').onclick = () => {
-          clearInterval(this.timer);
+          this.clear();
           this.next();
-          this.start();
         }
 
         document.getElementById('prev').onclick = () => {
-          clearInterval(this.timer);
+          this.clear();
           this.prev();
-          this.start();
         }
 
         [].forEach.call(this.dotImage, dot => {
           dot.onclick = (e) => {
-            this.resetClass();
             this.clear();
+            this.resetClass();
 
             this.index = Number(e.currentTarget.dataset.value);
             this.translateX = this.index * -this.width;
@@ -97,14 +95,17 @@
           easing: 'easeOutCubic',
           complete: () => {
             this.clear();
+            this.start();
           }
         });
       }
-      // 次・前　処理
+      // ドット色付け
       updateIndicator() {
         this.resetClass();
         this.dotImage[this.index].classList.add("li-gray");
       };
+
+      // 次へ・前へ処理
       next() {
         this.index = (this.index < this.images.length - 1)
           ? this.index + 1
@@ -149,7 +150,6 @@
       // インターバル初期化
       clear() {
         clearInterval(this.timer);
-        this.start();
       }
 
       // 開始

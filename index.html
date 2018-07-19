@@ -89,6 +89,8 @@
 
       // 画像切り替えアニメーション処理
       slideImage() {
+        anime.remove(this.target);
+
         anime({
           targets: this.target,
           translateX: this.translateX,

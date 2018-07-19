@@ -42,7 +42,7 @@
   <script>
     class Carousel {
       constructor() {
-        // クラス名取得
+        // エレメント取得
         this.images = document.querySelectorAll('.slider-images');
         this.target = document.querySelector('.slider-inside');
         this.width = document.querySelector('.slider-outside').clientWidth;
@@ -58,7 +58,7 @@
 
         this.createDots();
         this.bind();
-        this.start();
+        this.startCarousel();
       }
 
       // クリック処理
@@ -97,7 +97,7 @@
           easing: 'easeOutCubic',
           complete: () => {
             this.clear();
-            this.start();
+            this.startCarousel();
           }
         });
       }
@@ -155,7 +155,7 @@
       }
 
       // 開始
-      start() {
+      startCarousel() {
         this.timer = setInterval(this.next.bind(this), 3000);
       }
     }

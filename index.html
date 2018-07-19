@@ -38,19 +38,12 @@
     <p id="next">＞</p>
   </div>
 
-  <!-- console.log(this.dotImage); -->
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.2.0/anime.min.js"></script>
   <script>
-    // 画像配列
-    // const images = document.querySelectorAll('.slider-images');
-
     class Carousel {
       constructor() {
         this.images = document.querySelectorAll('.slider-images');
-        // クラス名取得
         this.target = document.querySelector('.slider-inside');
-        // 横幅取得
         this.width = document.querySelector('.slider-outside').clientWidth;
 
         this.index = 0;
@@ -65,7 +58,6 @@
       }
 
       bind() {
-        // 画像切り替え処理
         document.getElementById('next').onclick = () => {
           clearInterval(this.timer);
           this.next();
@@ -94,7 +86,6 @@
         });
       }
 
-      // 自動処理
       slideImage() {
         let domNode = anime({
           targets: this.target,
@@ -102,20 +93,11 @@
           easing: 'easeOutCubic'
         });
       }
-      // クラス名初期化
       updateIndicator() {
         this.resetClass();
         this.dotImage[this.index].classList.add("li-gray");
       };
-      // 次へ・前へ
       next() {
-        // if (index < images.length - 1) {
-        //   index++;
-        //   translateX -= width;
-        // } else if (index == images.length - 1) {
-        //   index = 0;
-        //   translateX = 0;
-        // };
         this.index = (this.index < this.images.length - 1)
           ? this.index + 1
           : 0;
@@ -131,19 +113,10 @@
           : this.index - 1;
 
         this.translateX = -this.width * this.index;
-        // if (index > 0) {
-        //   index--;
-        //   translateX += width;
-        // }
-        // else if (index == 0) {
-        //   index = images.length - 1;
-        //   translateX = width * index * -1;
-        // }
         this.updateIndicator();
         this.slideImage();
       }
 
-      // ドット追加
       createDots() {
         this.images.forEach((currentValue, index) => {
           const li = document.createElement('li');

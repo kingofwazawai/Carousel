@@ -9,7 +9,6 @@
 </head>
 
 <body>
-  <canvas class="fireworks"></canvas>
 
   <div class="slider-outside">
     <div class="slider-inside">
@@ -46,6 +45,8 @@
         this.images = document.querySelectorAll('.slider-images');
         this.target = document.querySelector('.slider-inside');
         this.width = document.querySelector('.slider-outside').clientWidth;
+        this.nextEl = document.getElementById('next');
+        this.prevEl = document.getElementById('prev');
 
         // 変数定義
         this.index = 0;
@@ -53,29 +54,27 @@
 
         this.timer = null;
         this.dotImage = null;
-        this.nextEl = document.getElementById('next');
-        this.prevEl = document.getElementById('prev');
 
-        this.createDots();
+        this.dots();
         this.bind();
-        this.startCarousel();
+        this.start();
       }
 
       // クリック処理
       bind() {
         this.nextEl.addEventListener('click', () => {
-          this.clear();
-          this.next();
+          this.clearTimer();
+          this.nextSlide();
         });
 
         this.prevEl.addEventListener('click', () => {
-          this.clear();
-          this.prev();
+          this.clearTimer();
+          this.prevSlide();
         });
 
         [].forEach.call(this.dotImage, dot => {
           dot.addEventListener('click', (e) => {
-            this.clear();
+            this.clearTimer();
             this.resetClass();
 
             this.index = Number(e.currentTarget.dataset.value);
@@ -96,8 +95,8 @@
           translateX: this.translateX,
           easing: 'easeOutCubic',
           complete: () => {
-            this.clear();
-            this.startCarousel();
+            this.clearTimer();
+            this.start();
           }
         });
       }
@@ -108,7 +107,7 @@
       };
 
       // 次へ・前へ処理
-      next() {
+      nextSlide() {
         this.index = (this.index < this.images.length - 1)
           ? this.index + 1
           : 0;
@@ -118,7 +117,7 @@
         this.updateIndicator();
         this.slideImage();
       }
-      prev() {
+      prevSlide() {
         this.index = (this.index <= 0)
           ? this.images.length - 1
           : this.index - 1;
@@ -129,7 +128,7 @@
       }
 
       // ドット追加処理
-      createDots() {
+      dots() {
         this.images.forEach((currentValue, index) => {
           const li = document.createElement('li');
           li.dataset.value = index;
@@ -150,13 +149,13 @@
       }
 
       // インターバル初期化
-      clear() {
+      clearTimer() {
         clearInterval(this.timer);
       }
 
       // 開始
-      startCarousel() {
-        this.timer = setInterval(this.next.bind(this), 3000);
+      start() {
+        this.timer = setInterval(this.nextSlide.bind(this), 3000);
       }
     }
 
